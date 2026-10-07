@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+pydantic[email]
+pydantic-settings
+python-jose[cryptography]
+pwdlib[argon2]
+python-dotenv
+pytest
+httpx
+python-multipart
+librosa
+numpy
+soundfile
+joblib
