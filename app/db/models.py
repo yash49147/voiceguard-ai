@@ -4,7 +4,7 @@ from sqlalchemy import Boolean, DateTime, Integer, String, ForeignKey, Float, Co
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.database import Base
-
+from sqlalchemy import UniqueConstraint
 
 def utc_now() -> datetime:
     return datetime.now(timezone.utc)
@@ -282,3 +282,43 @@ class AlertEvent(Base):
 
     analysis = relationship("AudioAnalysis", back_populates="alert_event")
     user = relationship("User", back_populates="alert_events")
+
+
+
+class ExotelCallMapping(Base):
+    __tablename__ = "exotel_call_mappings"
+
+    __table_args__ = (
+        UniqueConstraint(
+            "provider",
+            "provider_call_id",
+            name="uq_exotel_provider_call_id",
+        ),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+
+    call_id: Mapped[int] = mapped_column(
+        ForeignKey("calls.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+
+    provider: Mapped[str] = mapped_column(
+        String(32),
+        nullable=False,
+        default="exotel",
+    )
+
+    provider_call_id: Mapped[str] = mapped_column(
+        String(128),
+        nullable=False,
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=utc_now,
+        nullable=False,
+    )
+
+    call = relationship("Call")

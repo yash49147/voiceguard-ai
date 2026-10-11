@@ -11,8 +11,9 @@ from app.api.streaming import router as streaming_router
 from app.api import analysis
 from app.core.config import settings
 from app.db.database import init_db
-
-
+from app.api.exotel_webhook import router as exotel_webhook_router
+from app.api.exotel_stream import router as exotel_stream_router
+from app.api.exotel_calls import router as exotel_calls_router
 
 
 @asynccontextmanager
@@ -36,6 +37,9 @@ app.include_router(audio_router)
 app.include_router(analysis.router)
 app.include_router(alerts_router)
 app.include_router(streaming_router)
+app.include_router(exotel_webhook_router)
+app.include_router(exotel_stream_router)
+app.include_router(exotel_calls_router)
 
 @app.get("/health")
 def health_check():
